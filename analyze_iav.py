@@ -174,6 +174,14 @@ def main():
 
     args = parser.parse_args()
 
+    if args.lfc_threshold < 0:
+    print("Error: lfc_threshold debe ser mayor o igual a 0")
+    return
+
+if args.padj_threshold < 0 or args.padj_threshold > 1:
+    print("Error: padj_threshold debe estar entre 0 y 1")
+    return
+
     try:
 
         genes = load_deseq2_results(args.input_file)
