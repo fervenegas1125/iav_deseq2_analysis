@@ -194,4 +194,5 @@ if __name__ == "__main__":
     main()
 
 
-
+# Comando para ejecuar en la terminal:
+# uv run python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv
