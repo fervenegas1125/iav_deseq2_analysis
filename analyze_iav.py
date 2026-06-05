@@ -33,3 +33,43 @@ def classify_gene(log2_fold_change):
 # ejemplo para probar classify_gene():
 print(classify_gene(4.2))
 print(classify_gene(-3.0))
+
+
+# 3. load_deseq2_results()
+
+def load_deseq2_results(input_file):
+
+    genes = []
+
+    with open(input_file, "r") as file:
+
+        next(file)
+
+        for line in file:
+
+            line = line.strip()
+
+            if not line:
+                continue
+
+            columns = line.split("\t")
+
+            if len(columns) < 7:
+                continue
+
+            gene = columns[0]
+
+            try:
+                log2_fold_change = float(columns[2])
+                padj = float(columns[6])
+
+            except ValueError:
+                continue
+
+            genes.append((gene, log2_fold_change, padj))
+
+    return genes
+
+
+# ejemplo para probar load_deseq2_results():
+print(load_deseq2_results("data/iav_deseq2_results.tsv"))
