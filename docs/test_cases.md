@@ -173,3 +173,108 @@ El programa maneja errores de lectura del archivo de entrada.
 | 7 | archivo inexistente | mensaje de error | manejo de errores |
 
 
+## Caso 8 · ejecución con thresholds por defecto
+
+Entrada:
+
+```text
+python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv
+```
+
+Resultado esperado:
+
+```text
+El programa utiliza:
+
+lfc_threshold = 1.0
+padj_threshold = 0.05
+```
+
+Criterio evaluado:
+
+```text
+El programa funciona correctamente cuando el usuario no proporciona parámetros opcionales.
+```
+
+## Caso 9 · ejecución con thresholds personalizados
+
+Entrada:
+
+```text
+python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv --lfc_threshold 2.0 --padj_threshold 0.01
+```
+
+Resultado esperado:
+
+```text
+El programa utiliza:
+
+lfc_threshold = 2.0
+padj_threshold = 0.01
+```
+
+Criterio evaluado:
+
+```text
+Los thresholds definidos por el usuario sustituyen correctamente los valores por defecto.
+```
+
+## Caso 10 · lfc_threshold inválido
+
+Entrada:
+
+```text
+python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv --lfc_threshold -1
+```
+
+Resultado esperado:
+
+```text
+Error: lfc_threshold debe ser mayor o igual a 0
+```
+
+Criterio evaluado:
+
+```text
+El programa valida que el threshold de log2 Fold Change no sea negativo.
+```
+
+## Caso 11 · padj_threshold inválido (mayor que 1)
+
+Entrada:
+
+```text
+python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv --padj_threshold 2
+```
+
+Resultado esperado:
+
+```text
+Error: padj_threshold debe estar entre 0 y 1
+```
+
+Criterio evaluado:
+
+```text
+El programa valida correctamente el rango permitido para adjusted p-value.
+```
+
+## Caso 12 · padj_threshold inválido (negativo)
+
+Entrada:
+
+```text
+python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv --padj_threshold -0.5
+```
+
+Resultado esperado:
+
+```text
+Error: padj_threshold debe estar entre 0 y 1
+```
+
+Criterio evaluado:
+
+```text
+El programa rechaza valores negativos para adjusted p-value.
+```
