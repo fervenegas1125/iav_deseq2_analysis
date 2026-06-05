@@ -72,4 +72,31 @@ def load_deseq2_results(input_file):
 
 
 # ejemplo para probar load_deseq2_results():
-print(load_deseq2_results("data/iav_deseq2_results.tsv"))
+# print(load_deseq2_results("data/iav_deseq2_results.tsv"))
+
+
+# 4. write_results()
+
+
+def filter_genes(genes, lfc_threshold, padj_threshold):
+    """Filtra genes significativos y los clasifica."""
+
+    filtered_genes = []
+
+    for gene, log2_fold_change, padj in genes:
+
+        if is_significant(log2_fold_change, padj, lfc_threshold, padj_threshold):
+
+            status = classify_gene(log2_fold_change)
+
+            filtered_genes.append((gene, log2_fold_change, padj, status))
+
+    return filtered_genes
+
+# ejemplo para probar filter_genes():
+
+genes = load_deseq2_results("data/iav_deseq2_results.tsv")
+
+resultados = filter_genes(genes, 1, 0.05)
+
+print(resultados[:10])
