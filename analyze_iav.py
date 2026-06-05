@@ -100,3 +100,27 @@ genes = load_deseq2_results("data/iav_deseq2_results.tsv")
 resultados = filter_genes(genes, 1, 0.05)
 
 print(resultados[:10])
+
+
+# 5. write_results()
+
+def write_results(filtered_genes, output_file):
+    """Escribe los genes significativos en un archivo TSV."""
+
+    with open(output_file, "w") as file:
+
+        file.write("gene\tlog2FoldChange\tpadj\tstatus\n")
+
+        for gene, log2_fold_change, padj, status in filtered_genes:
+
+            file.write(f"{gene}\t{log2_fold_change}\t{padj}\t{status}\n")
+
+# ejemplo para probar write_results():
+
+genes = load_deseq2_results("data/iav_deseq2_results.tsv")
+
+filtered_genes = filter_genes(genes, 1, 0.05)
+
+write_results(filtered_genes, "results/iav_significant_genes.tsv")
+
+print("Archivo generado correctamente")
