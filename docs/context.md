@@ -45,3 +45,24 @@ Un gen se considerará diferencialmente expresado si cumple:
 
 Si log2FoldChange > 0, el gen se clasificará como sobreexpresado.
 Si log2FoldChange < 0, el gen se clasificará como subexpresado.
+
+## Extensión v1.2: Thresholds configurables
+
+La versión inicial utilizaba valores fijos para determinar la significancia diferencial:
+
+- lfc_threshold = 1.0
+- padj_threshold = 0.05
+
+Esta versión permite que el usuario configure ambos parámetros desde línea de comandos.
+
+Nuevos argumentos:
+
+- --lfc_threshold
+- --padj_threshold
+
+Si no se proporcionan, el programa utiliza los valores por defecto:
+
+- lfc_threshold = 1.0
+- padj_threshold = 0.05
+
+Esta mejora incrementa la flexibilidad y reproducibilidad de los análisis sin modificar el código fuente.
