@@ -14,9 +14,9 @@ def is_significant(log2_fold_change, padj, lfc_threshold, padj_threshold):
 
 # ejemplo para probar is_significant():
 
-print(is_significant(4.2, 0.0001, 1, 0.05))
-print(is_significant(0.3, 0.0001, 1, 0.05))
-print(is_significant(3.0, 0.8, 1, 0.05))
+# print(is_significant(4.2, 0.0001, 1, 0.05))
+# print(is_significant(0.3, 0.0001, 1, 0.05))
+# print(is_significant(3.0, 0.8, 1, 0.05))
 
 
 # 2. classify_gene()
@@ -31,8 +31,8 @@ def classify_gene(log2_fold_change):
     return "downregulated"
 
 # ejemplo para probar classify_gene():
-print(classify_gene(4.2))
-print(classify_gene(-3.0))
+# print(classify_gene(4.2))
+# print(classify_gene(-3.0))
 
 
 # 3. load_deseq2_results()
@@ -95,11 +95,11 @@ def filter_genes(genes, lfc_threshold, padj_threshold):
 
 # ejemplo para probar filter_genes():
 
-genes = load_deseq2_results("data/iav_deseq2_results.tsv")
+# genes = load_deseq2_results("data/iav_deseq2_results.tsv")
 
-resultados = filter_genes(genes, 1, 0.05)
+# resultados = filter_genes(genes, 1, 0.05)
 
-print(resultados[:10])
+# print(resultados[:10])
 
 
 # 5. write_results()
@@ -117,10 +117,81 @@ def write_results(filtered_genes, output_file):
 
 # ejemplo para probar write_results():
 
-genes = load_deseq2_results("data/iav_deseq2_results.tsv")
+# genes = load_deseq2_results("data/iav_deseq2_results.tsv")
 
-filtered_genes = filter_genes(genes, 1, 0.05)
+# filtered_genes = filter_genes(genes, 1, 0.05)
 
-write_results(filtered_genes, "results/iav_significant_genes.tsv")
+# write_results(filtered_genes, "results/iav_significant_genes.tsv")
 
-print("Archivo generado correctamente")
+# print("Archivo generado correctamente")
+
+
+# 6. print_summary()
+
+def print_summary(filtered_genes):
+    """Imprime un resumen de los genes significativos."""
+
+    total_genes = len(filtered_genes)
+
+    upregulated = 0
+    downregulated = 0
+
+    for gene, log2_fold_change, padj, status in filtered_genes:
+
+        if status == "upregulated":
+            upregulated += 1
+
+        elif status == "downregulated":
+            downregulated += 1
+
+    print(f"Genes significativos: {total_genes}")
+    print(f"Genes sobreexpresados: {upregulated}")
+    print(f"Genes subexpresados: {downregulated}")
+
+# ejemplo para probar print_summary():
+# genes = load_deseq2_results("data/iav_deseq2_results.tsv")
+
+# filtered_genes = filter_genes(genes, 1, 0.05)
+
+# print_summary(filtered_genes)
+
+
+# 7. main()
+
+import sys
+
+
+def main():
+
+    if len(sys.argv) != 3:
+        print("Uso: python analyze_iav.py " "archivo_entrada archivo_salida")
+        return
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
+    lfc_threshold = 1
+    padj_threshold = 0.05
+
+    try:
+
+        genes = load_deseq2_results(input_file)
+
+        filtered_genes = filter_genes(genes, lfc_threshold, padj_threshold)
+
+        write_results(filtered_genes, output_file)
+
+        print_summary(filtered_genes)
+
+    except FileNotFoundError:
+        print(f"Error: no se encontró el archivo '{input_file}'")
+
+    except Exception as error:
+        print(f"Error: {error}")
+
+
+if __name__ == "__main__":
+    main()
+
+
+
