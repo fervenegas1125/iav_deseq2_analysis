@@ -158,42 +158,42 @@ def print_summary(filtered_genes):
 
 # 7. main()
 
-import argparse
+import sys
 
 
 def main():
 
-    parser = argparse.ArgumentParser()
+    if len(sys.argv) != 7:
+        print(
+            "Uso: python analyze_iav.py archivo_entrada archivo_salida --lfc_threshold valor --padj_threshold valor"
+        )
+        return
 
-    parser.add_argument("input_file")
-    parser.add_argument("output_file")
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
 
-    parser.add_argument("--lfc_threshold", type=float, default=1.0)
+    lfc_threshold = float(sys.argv[4])
+    padj_threshold = float(sys.argv[6])
 
-    parser.add_argument("--padj_threshold", type=float, default=0.05)
+    if lfc_threshold < 0:
+        print("Error: lfc_threshold debe ser mayor o igual a 0")
+        return
 
-    args = parser.parse_args()
-
-    if args.lfc_threshold < 0:
-    print("Error: lfc_threshold debe ser mayor o igual a 0")
-    return
-
-if args.padj_threshold < 0 or args.padj_threshold > 1:
-    print("Error: padj_threshold debe estar entre 0 y 1")
-    return
+    if padj_threshold < 0 or padj_threshold > 1:
+        print("Error: padj_threshold debe estar entre 0 y 1")
+        return
 
     try:
+        genes = load_deseq2_results(input_file)
 
-        genes = load_deseq2_results(args.input_file)
+        filtered_genes = filter_genes(genes, lfc_threshold, padj_threshold)
 
-        filtered_genes = filter_genes(genes, args.lfc_threshold, args.padj_threshold)
-
-        write_results(filtered_genes, args.output_file)
+        write_results(filtered_genes, output_file)
 
         print_summary(filtered_genes)
 
     except FileNotFoundError:
-        print(f"Error: no se encontró el archivo '{args.input_file}'")
+        print(f"Error: no se encontró el archivo '{input_file}'")
 
     except Exception as error:
         print(f"Error: {error}")
@@ -201,7 +201,6 @@ if args.padj_threshold < 0 or args.padj_threshold > 1:
 
 if __name__ == "__main__":
     main()
-
 
 # Comando para ejecuar en la terminal:
 # uv run python analyze_iav.py data/iav_deseq2_results.tsv results/iav_significant_genes.tsv
