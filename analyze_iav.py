@@ -158,33 +158,34 @@ def print_summary(filtered_genes):
 
 # 7. main()
 
-import sys
+import argparse
 
 
 def main():
 
-    if len(sys.argv) != 3:
-        print("Uso: python analyze_iav.py " "archivo_entrada archivo_salida")
-        return
+    parser = argparse.ArgumentParser()
 
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
+    parser.add_argument("input_file")
+    parser.add_argument("output_file")
 
-    lfc_threshold = 1
-    padj_threshold = 0.05
+    parser.add_argument("--lfc_threshold", type=float, default=1.0)
+
+    parser.add_argument("--padj_threshold", type=float, default=0.05)
+
+    args = parser.parse_args()
 
     try:
 
-        genes = load_deseq2_results(input_file)
+        genes = load_deseq2_results(args.input_file)
 
-        filtered_genes = filter_genes(genes, lfc_threshold, padj_threshold)
+        filtered_genes = filter_genes(genes, args.lfc_threshold, args.padj_threshold)
 
-        write_results(filtered_genes, output_file)
+        write_results(filtered_genes, args.output_file)
 
         print_summary(filtered_genes)
 
     except FileNotFoundError:
-        print(f"Error: no se encontró el archivo '{input_file}'")
+        print(f"Error: no se encontró el archivo '{args.input_file}'")
 
     except Exception as error:
         print(f"Error: {error}")

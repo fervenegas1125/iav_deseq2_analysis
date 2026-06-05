@@ -171,3 +171,5 @@ El programa maneja errores de lectura del archivo de entrada.
 | 5 | `GENE4 NA 0.001` | se ignora | conversión numérica |
 | 6 | `GENE5 0.5` | se ignora | línea incompleta |
 | 7 | archivo inexistente | mensaje de error | manejo de errores |
+
+
