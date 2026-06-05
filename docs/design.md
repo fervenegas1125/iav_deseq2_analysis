@@ -84,3 +84,20 @@ flowchart TD
     L -->|Sí| M[Escribir resultados]
     M --> N[Mostrar resumen]
     N --> O[Fin]
+
+
+## Actualización del diseño
+
+La función main() ahora obtiene cuatro argumentos desde línea de comandos:
+
+1. archivo de entrada
+2. archivo de salida
+3. lfc_threshold (opcional)
+4. padj_threshold (opcional)
+
+Los thresholds son enviados a filter_genes() para determinar la significancia de cada gen.
+
+Si el usuario no especifica los thresholds, se utilizan:
+
+- 1.0 para log2 Fold Change
+- 0.05 para adjusted p-value
